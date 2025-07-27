@@ -1,13 +1,52 @@
 import streamlit as st
 
-st.set_page_config(page_title="Advice Game: Hold Onto €250 Million in Cork", layout="centered")
+st.set_page_config(page_title="Cork Adventure: 250M Text Quest", layout="centered")
 
-st.title("🎲 Advice Game: Can You Hold Onto €250 Million in Cork?")
-st.markdown(
-    """
-Imagine it's day one after winning €250 million in the lotto. Every decision you make will affect your wealth and happiness. Will you end up richer, happier—or broke? Play to find out!
-    """
-)
+retro_css = """
+<style>
+body, .stApp, .stMarkdown, .stTextInput, .stButton, .stRadio, .stHeader, .stSubheader {
+    font-family: 'Fira Mono', 'Consolas', 'Courier New', monospace !important;
+    background: #181818 !important;
+    color: #00FF00 !important;
+}
+.stApp { background: #181818 !important; }
+.stMarkdown, .stHeader, .stSubheader, .stTextInput, .stButton, .stRadio {
+    color: #00FF00 !important;
+}
+.retro-box {
+    border: 2px solid #00FF00;
+    border-radius: 6px;
+    background: #101010;
+    padding: 18px 18px 10px 18px;
+    margin-bottom: 18px;
+    font-size: 1.13em;
+    box-shadow: 0 0 18px #00FF0033;
+}
+.retro-prompt {
+    color: #00FF00;
+    font-weight: bold;
+    font-family: inherit;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+.retro-score {
+    color: #FFD700;
+    font-weight: bold;
+    font-family: inherit;
+    margin-bottom: 8px;
+}
+.retro-end {
+    color: #FFD700;
+    font-weight: bold;
+    font-family: inherit;
+    margin-top: 18px;
+    font-size: 1.2em;
+}
+</style>
+"""
+st.markdown(retro_css, unsafe_allow_html=True)
+
+st.markdown('<div class="retro-box"><span class="retro-prompt">CORK ADVENTURE: 250M TEXT QUEST</span><br>Type your way through a fortune!<br><br>It is a dark and stormy night in Cork. You have just won €250 million. Every decision could change your fate.<br><br><span class="retro-score">Type carefully. Fortune: 100%</span></div>', unsafe_allow_html=True)
 
 # Initialize session state variables
 if 'score' not in st.session_state:
@@ -62,14 +101,12 @@ questions = [
 
 if st.session_state.question < len(questions):
     q = questions[st.session_state.question]
-    st.header(f"Scenario {st.session_state.question + 1}")
-    st.write(q["question"])
+    st.markdown(f'<div class="retro-box"><span class="retro-prompt">Scenario {st.session_state.question + 1}:</span><br>{q["question"]}</div>', unsafe_allow_html=True)
 
-    # Options displayed as radio buttons
-    choice = st.radio("Choose your action:", [opt[0] for opt in q["options"]])
+    # Options as radio buttons, styled as retro
+    choice = st.radio("\n> What will you do?", [opt[0] for opt in q["options"]], key=f"q{st.session_state.question}")
 
-    if st.button("Submit"):
-        # Find selected option index
+    if st.button("Submit", key=f"submit{st.session_state.question}"):
         selected_idx = [opt[0] for opt in q["options"]].index(choice)
         ans, effect, feedback = q["options"][selected_idx]
 
@@ -77,33 +114,33 @@ if st.session_state.question < len(questions):
         st.session_state.answers.append((q["question"], ans, feedback, effect))
         st.session_state.question += 1
 
-        st.rerun()  # Updated here
+        st.rerun()
 
 else:
-    st.success("Game Over!")
+
+    st.markdown('<div class="retro-box retro-end">GAME OVER</div>', unsafe_allow_html=True)
     final_score = max(0, st.session_state.score)
-    st.subheader(f"Your 'fortune' meter: {final_score}% of €250 million left")
+    st.markdown(f'<div class="retro-box"><span class="retro-score">Fortune: {final_score}% of €250 million left</span></div>', unsafe_allow_html=True)
 
     if final_score >= 80:
-        st.write("🏅 You're a wealth management pro! Cork's newest wise millionaire.")
+        st.markdown('<div class="retro-box">🏅 <b>You are a wealth management pro! Cork\'s newest wise millionaire.</b></div>', unsafe_allow_html=True)
     elif final_score >= 50:
-        st.write("👏 Not bad! You avoided disaster but have some room to tighten up your planning.")
+        st.markdown('<div class="retro-box">👏 <b>Not bad! You avoided disaster but have some room to tighten up your planning.</b></div>', unsafe_allow_html=True)
     else:
-        st.write("😱 Uh oh...You've fallen for some classic pitfalls. Your fortune needs rescuing!")
+        st.markdown('<div class="retro-box">😱 <b>Uh oh...You\'ve fallen for some classic pitfalls. Your fortune needs rescuing!</b></div>', unsafe_allow_html=True)
 
-    st.markdown("---")
-    st.header("Your choices and lessons:")
+    st.markdown('<div class="retro-box"><b>Your choices and lessons:</b></div>', unsafe_allow_html=True)
     for i, (q_txt, ans_txt, fb_txt, eff_val) in enumerate(st.session_state.answers, 1):
-        st.markdown(f"**{i}. {q_txt}**\n\n- Your choice: *{ans_txt}*\n- Impact: {'+' if eff_val>0 else ''}{eff_val}%\n- Lesson: {fb_txt}")
+        st.markdown(f'<div class="retro-box">{i}. <b>{q_txt}</b><br>&gt; Your choice: <i>{ans_txt}</i><br>&gt; Impact: {"+" if eff_val>0 else ""}{eff_val}%<br>&gt; Lesson: {fb_txt}</div>', unsafe_allow_html=True)
 
     if st.button("Play again"):
         for key in ['score', 'question', 'answers']:
             del st.session_state[key]
-        st.rerun()  # Updated here
+        st.rerun()
 
 st.markdown(
     """
----
-*This game is inspired by research into real-life lottery winners. Play again, try new choices, and learn how to stay Cork's happiest millionaire!*
+----
+<span style="color:#00FF00;font-family:'Fira Mono','Consolas','Courier New',monospace;">*This game is inspired by research into real-life lottery winners. Play again, try new choices, and learn how to stay Cork's happiest millionaire!*</span>
 """
 )
