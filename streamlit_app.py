@@ -87,3 +87,10 @@ else:
 
     if st.button("Play again"):
         for key in ['score', 'question', 'answers']:
+            del st.session_state[key]
+        st.experimental_rerun()
+
+st.markdown("""
+---
+*This game is inspired by research into real-life lottery winners. Play again, try new choices, and learn how to stay Cork's happiest millionaire!*
+""")
