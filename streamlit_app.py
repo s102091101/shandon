@@ -10,8 +10,13 @@ body, .stApp, .stMarkdown, .stTextInput, .stButton, .stRadio, .stHeader, .stSubh
     color: #00FF00 !important;
 }
 .stApp { background: #181818 !important; }
-.stMarkdown, .stHeader, .stSubheader, .stTextInput, .stButton, .stRadio {
+.stMarkdown, .stHeader, .stSubheader, .stTextInput, .stButton {
     color: #00FF00 !important;
+}
+.stRadio label, .stRadio div[role="radiogroup"] label {
+    color: #fff !important;
+    font-family: 'Fira Mono', 'Consolas', 'Courier New', monospace !important;
+    font-size: 1.08em;
 }
 .retro-box {
     border: 2px solid #00FF00;
@@ -46,7 +51,43 @@ body, .stApp, .stMarkdown, .stTextInput, .stButton, .stRadio, .stHeader, .stSubh
 """
 st.markdown(retro_css, unsafe_allow_html=True)
 
-st.markdown('<div class="retro-box"><span class="retro-prompt">CORK ADVENTURE: 250M TEXT QUEST</span><br>Type your way through a fortune!<br><br>It is a dark and stormy night in Cork. You have just won €250 million. Every decision could change your fate.<br><br><span class="retro-score">Choose carefully. Fortune: 100%</span></div>', unsafe_allow_html=True)
+# Progress bar and fortune meter
+def fortune_color(score):
+    if score >= 80:
+        return '#00FF00'
+    elif score >= 50:
+        return '#FFD700'
+    else:
+        return '#FF4444'
+
+progress = st.session_state.get('score', 100)
+bar_color = fortune_color(progress)
+st.markdown(f'''
+<div style="width:100%;max-width:600px;margin:0 auto 18px auto;">
+  <div style="font-family:'Fira Mono','Consolas','Courier New',monospace;font-size:1.08em;color:{bar_color};margin-bottom:2px;text-align:center;letter-spacing:1px;">Fortune Meter: {progress}%</div>
+  <div style="background:#222;border-radius:6px;width:100%;height:18px;box-shadow:0 1px 6px #00FF0033;">
+    <div style="height:18px;border-radius:6px;background:{bar_color};width:{max(0,progress)}%;transition:width 0.3s;"></div>
+  </div>
+</div>
+''', unsafe_allow_html=True)
+
+
+# Typewriter effect for intro
+import time
+intro_lines = [
+    '<span class="retro-prompt">CORK ADVENTURE: 250M TEXT QUEST</span>',
+    'Type your way through a fortune!',
+    '',
+    'It is a dark and stormy night in Cork. You have just won €250 million. Every decision could change your fate.',
+    '',
+    '<span class="retro-score">Choose carefully. Fortune: 100%</span>'
+]
+intro_placeholder = st.empty()
+intro_html = '<div class="retro-box">'
+for line in intro_lines:
+    intro_html += line + '<br>'
+    intro_placeholder.markdown(intro_html + '</div>', unsafe_allow_html=True)
+    time.sleep(0.55)
 
 # Initialize session state variables
 if 'score' not in st.session_state:
@@ -101,7 +142,19 @@ questions = [
 
 if st.session_state.question < len(questions):
     q = questions[st.session_state.question]
-    st.markdown(f'<div class="retro-box"><span class="retro-prompt">Scenario {st.session_state.question + 1}:</span><br>{q["question"]}</div>', unsafe_allow_html=True)
+    import time
+    q_placeholder = st.empty()
+    q_html = f'<div class="retro-box"><span class="retro-prompt">Scenario {st.session_state.question + 1}:</span><br>'
+    for char in q["question"]:
+        q_html += char
+        q_placeholder.markdown(q_html + '</div>', unsafe_allow_html=True)
+        time.sleep(0.018)
+    q_html += '<br>'
+    for opt in q["options"]:
+        q_html += f'<br>{opt[0]}'
+        q_placeholder.markdown(q_html + '</div>', unsafe_allow_html=True)
+        time.sleep(0.22)
+    q_placeholder.markdown(q_html + '</div>', unsafe_allow_html=True)
 
     # Options as radio buttons, styled as retro
     choice = st.radio("\n> What will you do?", [opt[0] for opt in q["options"]], key=f"q{st.session_state.question}")
