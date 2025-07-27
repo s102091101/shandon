@@ -46,7 +46,7 @@ body, .stApp, .stMarkdown, .stTextInput, .stButton, .stRadio, .stHeader, .stSubh
 """
 st.markdown(retro_css, unsafe_allow_html=True)
 
-st.markdown('<div class="retro-box"><span class="retro-prompt">CORK ADVENTURE: 250M TEXT QUEST</span><br>Type your way through a fortune!<br><br>It is a dark and stormy night in Cork. You have just won €250 million. Every decision could change your fate.<br><br><span class="retro-score">Type carefully. Fortune: 100%</span></div>', unsafe_allow_html=True)
+st.markdown('<div class="retro-box"><span class="retro-prompt">CORK ADVENTURE: 250M TEXT QUEST</span><br>Type your way through a fortune!<br><br>It is a dark and stormy night in Cork. You have just won €250 million. Every decision could change your fate.<br><br><span class="retro-score">Choose carefully. Fortune: 100%</span></div>', unsafe_allow_html=True)
 
 # Initialize session state variables
 if 'score' not in st.session_state:
@@ -138,9 +138,5 @@ else:
             del st.session_state[key]
         st.rerun()
 
-st.markdown(
-    """
-----
-<span style="color:#00FF00;font-family:'Fira Mono','Consolas','Courier New',monospace;">*This game is inspired by research into real-life lottery winners. Play again, try new choices, and learn how to stay Cork's happiest millionaire!*</span>
-"""
-)
+st.markdown('<hr style="border:1px solid #00FF00;">', unsafe_allow_html=True)
+st.markdown('<span style="color:#00FF00;font-family:\'Fira Mono\',\'Consolas\',\'Courier New\',monospace;">*This game is inspired by research into real-life lottery winners. Play again, try new choices, and learn how to stay Cork\'s happiest millionaire!*</span>', unsafe_allow_html=True)
