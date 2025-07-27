@@ -77,7 +77,7 @@ if st.session_state.question < len(questions):
         st.session_state.answers.append((q["question"], ans, feedback, effect))
         st.session_state.question += 1
 
-        st.experimental_rerun()
+        st.rerun()  # Updated here
 
 else:
     st.success("Game Over!")
@@ -99,7 +99,7 @@ else:
     if st.button("Play again"):
         for key in ['score', 'question', 'answers']:
             del st.session_state[key]
-        st.experimental_rerun()
+        st.rerun()  # Updated here
 
 st.markdown(
     """
