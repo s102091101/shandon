@@ -3,6 +3,7 @@ import streamlit as st
 st.set_page_config(page_title="Cork Adventure: 250M Text Quest", layout="centered")
 
 
+
 retro_css = """
 <style>
 body, .stApp, .stMarkdown, .stTextInput, .stButton, .stRadio, .stHeader, .stSubheader {
@@ -86,12 +87,9 @@ intro_lines = [
     '',
     '<span class="retro-score">Choose carefully. Fortune: 100%</span>'
 ]
-intro_placeholder = st.empty()
-intro_html = '<div class="retro-box">'
-for line in intro_lines:
-    intro_html += line + '<br>'
-    intro_placeholder.markdown(intro_html + '</div>', unsafe_allow_html=True)
-    time.sleep(0.55)
+
+# Show the intro box statically, only once, above the questions
+st.markdown('<div class="retro-box"><span class="retro-prompt">CORK ADVENTURE: 250M TEXT QUEST</span><br>Type your way through a fortune!<br><br>It is a dark and stormy night in Cork. You have just won €250 million. Every decision could change your fate.<br><br><span class="retro-score">Choose carefully. Fortune: 100%</span></div>', unsafe_allow_html=True)
 
 # Initialize session state variables
 if 'score' not in st.session_state:
@@ -145,9 +143,7 @@ questions = [
 ]
 
 if st.session_state.question < len(questions):
-    # Show the intro box statically, only once, above the questions
-    if st.session_state.question == 0:
-        st.markdown('<div class="retro-box"><span class="retro-prompt">CORK ADVENTURE: 250M TEXT QUEST</span><br>Type your way through a fortune!<br><br>It is a dark and stormy night in Cork. You have just won €250 million. Every decision could change your fate.<br><br><span class="retro-score">Choose carefully. Fortune: 100%</span></div>', unsafe_allow_html=True)
+
 
     q = questions[st.session_state.question]
     import time
