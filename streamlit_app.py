@@ -147,18 +147,29 @@ if st.session_state.question < len(questions):
 
     q = questions[st.session_state.question]
     import time
-    q_placeholder = st.empty()
-    q_html = f'<div class="retro-box"><span class="retro-prompt">Scenario {st.session_state.question + 1}:</span><br>'
-    for char in q["question"]:
-        q_html += char
+    # Use a session state flag to only show the typewriter effect the first time a scenario is loaded
+    scenario_flag = f"scenario_{st.session_state.question}_typed"
+    if not st.session_state.get(scenario_flag, False):
+        q_placeholder = st.empty()
+        q_html = f'<div class="retro-box"><span class="retro-prompt">Scenario {st.session_state.question + 1}:</span><br>'
+        for char in q["question"]:
+            q_html += char
+            q_placeholder.markdown(q_html + '</div>', unsafe_allow_html=True)
+            time.sleep(0.018)
+        q_html += '<br>'
+        for opt in q["options"]:
+            q_html += f'<br>{opt[0]}'
+            q_placeholder.markdown(q_html + '</div>', unsafe_allow_html=True)
+            time.sleep(0.22)
         q_placeholder.markdown(q_html + '</div>', unsafe_allow_html=True)
-        time.sleep(0.018)
-    q_html += '<br>'
-    for opt in q["options"]:
-        q_html += f'<br>{opt[0]}'
-        q_placeholder.markdown(q_html + '</div>', unsafe_allow_html=True)
-        time.sleep(0.22)
-    q_placeholder.markdown(q_html + '</div>', unsafe_allow_html=True)
+        st.session_state[scenario_flag] = True
+    else:
+        # On rerun, just show the full question and options instantly
+        q_html = f'<div class="retro-box"><span class="retro-prompt">Scenario {st.session_state.question + 1}:</span><br>{q["question"]}<br>'
+        for opt in q["options"]:
+            q_html += f'<br>{opt[0]}'
+        q_html += '</div>'
+        st.markdown(q_html, unsafe_allow_html=True)
 
     # Options as radio buttons, styled as retro
     choice = st.radio("\n> What will you do?", [opt[0] for opt in q["options"]], key=f"q{st.session_state.question}")
@@ -170,7 +181,10 @@ if st.session_state.question < len(questions):
         st.session_state.score += effect
         st.session_state.answers.append((q["question"], ans, feedback, effect))
         st.session_state.question += 1
-
+        # Reset typewriter flag for next scenario
+        next_flag = f"scenario_{st.session_state.question}_typed"
+        if next_flag in st.session_state:
+            del st.session_state[next_flag]
         st.rerun()
 
 else:
