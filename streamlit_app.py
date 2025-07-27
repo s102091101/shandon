@@ -2,6 +2,7 @@ import streamlit as st
 
 st.set_page_config(page_title="Cork Adventure: 250M Text Quest", layout="centered")
 
+
 retro_css = """
 <style>
 body, .stApp, .stMarkdown, .stTextInput, .stButton, .stRadio, .stHeader, .stSubheader {
@@ -62,9 +63,12 @@ def fortune_color(score):
 
 progress = st.session_state.get('score', 100)
 bar_color = fortune_color(progress)
+total_cash = 250_000_000
+cash_left = max(0, int(total_cash * progress / 100))
+cash_str = f"€{cash_left:,}".replace(",", ",")
 st.markdown(f'''
 <div style="width:100%;max-width:600px;margin:0 auto 18px auto;">
-  <div style="font-family:'Fira Mono','Consolas','Courier New',monospace;font-size:1.08em;color:{bar_color};margin-bottom:2px;text-align:center;letter-spacing:1px;">Fortune Meter: {progress}%</div>
+  <div style="font-family:'Fira Mono','Consolas','Courier New',monospace;font-size:1.08em;color:{bar_color};margin-bottom:2px;text-align:center;letter-spacing:1px;">Fortune Meter: {progress}% &mdash; {cash_str}</div>
   <div style="background:#222;border-radius:6px;width:100%;height:18px;box-shadow:0 1px 6px #00FF0033;">
     <div style="height:18px;border-radius:6px;background:{bar_color};width:{max(0,progress)}%;transition:width 0.3s;"></div>
   </div>
@@ -141,6 +145,10 @@ questions = [
 ]
 
 if st.session_state.question < len(questions):
+    # Show the intro box statically, only once, above the questions
+    if st.session_state.question == 0:
+        st.markdown('<div class="retro-box"><span class="retro-prompt">CORK ADVENTURE: 250M TEXT QUEST</span><br>Type your way through a fortune!<br><br>It is a dark and stormy night in Cork. You have just won €250 million. Every decision could change your fate.<br><br><span class="retro-score">Choose carefully. Fortune: 100%</span></div>', unsafe_allow_html=True)
+
     q = questions[st.session_state.question]
     import time
     q_placeholder = st.empty()
