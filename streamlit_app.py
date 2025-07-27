@@ -56,27 +56,23 @@ st.markdown(retro_css, unsafe_allow_html=True)
 # --- ASCII Art for Cork City Crest and EuroMillions ---
 ascii_cork = '''
 <pre style="color:#00FF00;font-family:'Fira Mono','Consolas','Courier New',monospace;font-size:0.95em;line-height:1.1;margin:0;white-space:pre;">
-   |\    /|
-  /  \__/  \
- |  CORK   |
- |  CITY   |
- |  Rocks! |
-  \      /
-   |____|
+    .------.
+   /        \
+  /  CORK    \
+ |   CITY     |
+ |   ROCKS!   |
+  \          /
+   \        /
+    '------'
 </pre>
 '''
 ascii_euro = '''
 <pre style="color:#FFD700;font-family:'Fira Mono','Consolas','Courier New',monospace;font-size:0.95em;line-height:1.1;margin:0;white-space:pre;">
-   _______
- _       _   _                  
-| |     | | | |                 
-| | ___ | |_| |_ ___ _ __ _   _ 
-| |/ _ \| __| __/ _ \ '__| | | |
-| | (_) | |_| ||  __/ |  | |_| |
-|_|\___/ \__|\__\___|_|   \__, |
-                           __/ |
-                          |___/ 
-    ( € )
+   .--------.
+  /  EURO   \
+ | MILLIONS |
+  \   ( € ) /
+   '--------'
 </pre>
 '''
 
